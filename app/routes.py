@@ -1,6 +1,6 @@
 from . import app, db
 from .models import Medico, Paciente, Consultorio
-from flask import render_template, request
+from flask import render_template, request, flash , redirect
 
 #crear ruta para ver los medicos
 @app.route("/medicos")
@@ -66,50 +66,83 @@ def create_paciente():
 
 
 
-@app.route("/medico/<int:id>")
-def get_medico_by_id(id):
-    
-    medico = Medico.query.get(id)
+##CREAR MEdcio
 
-    return render_template("medico.html" , 
-                           med = medico)  
-    
-    
-@app.route("/medicos/create", methods = ['GET' , 'POST'] )
+@app.route("/medicos/create", methods =['GET','POST'])
 def create_medico():
+    ##mostrar el formulario
     
-    if( request.method == 'GET'  ):
-     
+    if(request.metod == 'GET' ):
+        
+    ##ingreso de usuario
         especialidades = [
-            "oncologo",
-            "odontologo",
-            "pediatra"
-            
+        "cardiologia",
+        "odontologia",
+        "urologia"
         ]
-        return render_template("medico_form.html", 
-                            especialidades = especialidades )
-        
-        
-    ###Cuando el usuario presiona el boton de guardar
-    ### los datos del formulario viajan al servidor 
-    ## utilizando el motodo POST
     
+        return render_template("medico_form.html",
+                           especialidades = especialidades)
     
     elif(request.method == 'POST'):
-    #Cuando se presiona 'guardar'
-    #crear un objeto de tipo paciente
-        new_medico = Medico (nombre = request.form["nombre"],
-                            apellidos = request.form["apellidos"],
-                            tipo_identificacion = request.form["ti"],
-                            numero_identificacion = request.form["ni"],
-                            registro_medico = request.form["rm"],
-                            especialidad = request.form["es"]
-                            )
     
-        ##añadirlo a la sesion sqlalchemy
-        db.session.add(new_medico)
+        new_medico = Medico(nombre = request.form["nombre"],
+                        apellidos = request.form["apellidos"],
+                        tipo_identificacion = request.form["ti"],
+                        numero_identificacion = request.form["ni"],
+                        registro_medico = request.form["rm"],
+                        especialidad = request.form["es"]
+                        )
+    db.session.add(new_medico)
+    db.session.commit()
+    flash("Medico registradp corresctamente")
+    return redirect("/medicos")
+
+@app.route("/medicos/update/<int:id>", methods=["POST", "GET"])
+def update_medico(id):
+    especialidades = [
+            "cardiologia",
+            "odontologia",
+            "urologia"
+        ]
+    medico_update= Medico.query.get(id)
+    if(request.method == "GET"):
+        return render_template("medico_update.html",
+                           medico_update = medico_update,
+                           especialidades = especialidades)
+    elif(request.method == "POST"):
+    #actualizar al medico, con los datos del form
+        medico_update.nombre = request.form["nombre"]
+        medico_update.apellidos = request.form["apellidos"]
+        medico_update.tipo_identificacion = request.form["ti"]
+        medico_update.numero_identificacion = request.form["ni"]
+        medico_update.registro_medico = request.form["rm"]
+        medico_update.especialidad = request.form["es"]
         db.session.commit()
-        return "medico registrado"
+        return "medico actualizado"
+    
+@app.route("/medicos/delete/<int:id>")
+def delete_medico(id):
+    medico_delete = Medico.query.get(id)
+    db.session.delete(medico_delete)
+    db.session.commit()
+    return redirect ("/medicos")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #crear ruta traer el consultorio
@@ -128,7 +161,7 @@ def create_Consultorio():
             "123",
             "102"
         ]
-        return render_template("Consultorio_form.html", 
+        return render_template("Consultorio_form.html",
                             numero = numero )
         
     
