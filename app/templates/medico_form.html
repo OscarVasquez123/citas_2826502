@@ -10,7 +10,7 @@
     <form method="post" action="">
         <p>Nombre: <input type="text" name="nombre" />  </p>
         <p>Apellidos: <input type="text" name="apellidos" />  </p>
-        <p> Tipo identificacion:
+        <p>Tipo identificacion:
             <select name="ti">
                 <option>TI</option>
                 <option>CC</option>
@@ -25,7 +25,7 @@
         <p>
             Especialidad:
             <select name="es">
-              {% for especialidad in especialidades %}
+              {%for especialidad in especialidades %}
                 <option> {{ especialidad }} </option>
               {% endfor %}
             </select>

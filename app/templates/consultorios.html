@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de consultorio</title>
+    <title>Lista de medicos</title>
 </head>
 <body>
-    <h1>Lista de consultorio</h1>
+    <h1>Lista de medicos</h1>
     <table>
         <thead>
              <tr>
-                <th>Numero</th>
-                
+                <th>numero</th>
             </tr>
         </thead>
-    <tbody>
-        {% for consultorio in consultorios %}
-            <tr>
-                <td> {{  consultorio.numero}} </td>
-               
-            </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot></tfoot>
+        <tbody>
+            {% for consultorio in consultorio %}
+                    <tr>
+                        <td>{{ consultorio.numero}} </td>
+            {% endfor %}
+        </tbody>
+        <tfoot></tfoot>
     </table>
-<!-- Contenido de tu página va aquí -->
-
-</body>
+  </body>
 </html>
